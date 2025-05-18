@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+
 function SignInForm() {
   const [state, setState] = React.useState({
     email: "",
@@ -8,6 +9,7 @@ function SignInForm() {
   });
 
   const navigate = useNavigate();
+
   const handleChange = (evt) => {
     const value = evt.target.value;
     setState({
@@ -22,7 +24,7 @@ function SignInForm() {
     const { email, password } = state;
 
     try {
-      const response = await fetch("http://localhost:8081/signin", {
+      const response = await fetch("http://localhost:8081/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,17 +35,19 @@ function SignInForm() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message);
-        setState({
-          email: "",
-          password: "",
-        });
+        //setUser(data.user);
+        console.log("Login success:", data);
+
         navigate("/dashboard");
       } else {
-        alert(`Sign in failed: ${data.error || data.message}`);
+        console.error("Login failed:", data);
+        alert(data.error || "Login failed");
+        return;
       }
-    } catch (error) {
-      alert("Error signing in: " + error.message);
+      // Save user info, navigate, etc.
+    } catch (err) {
+      console.error("Server error:", err);
+      alert("Server is not responding");
     }
   };
 
