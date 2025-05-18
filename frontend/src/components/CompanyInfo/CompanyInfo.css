@@ -1,0 +1,102 @@
+.company-info {
+  min-height: 100vh;
+  padding: 80px 60px;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f9fafc 100%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #0d1a4b;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.company-info h1 {
+  font-size: 3rem;
+  margin-bottom: 40px;
+  font-weight: 800;
+  text-align: center;
+  color: #1e40af;
+  text-shadow: 1px 1px 3px rgba(30, 64, 175, 0.3);
+}
+
+.company-info-content {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  justify-content: center;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.company-info-text {
+  flex: 1;
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #1e293b;
+  max-width: 500px;
+  text-align: left;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.company-info-text:hover {
+  box-shadow: 0 12px 30px rgba(30, 64, 175, 0.2);
+}
+
+.company-info-gallery {
+  flex: 1;
+  max-width: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.company-info-gallery:hover {
+  box-shadow: 0 12px 30px rgba(30, 64, 175, 0.2);
+}
+
+.company-photo {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform 0.4s ease;
+}
+
+.company-photo:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .company-info {
+    padding: 40px 20px;
+  }
+
+  .company-info h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .company-info-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .company-info-text,
+  .company-info-gallery {
+    max-width: 100%;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .company-info-text {
+    font-size: 1rem;
+    text-align: center;
+  }
+}

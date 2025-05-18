@@ -1,0 +1,41 @@
+.dashboard {
+  display: flex;
+  gap: 10px;
+  font-family: "Roboto", Arial, sans-serif;
+  background: #27374d;
+}
+.dashboard--content {
+  background: #f5fdff;
+  flex: 1;
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+}
+.chatbot-icon {
+  position: fixed;
+  bottom: 20px;
+  left: 900px;
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s ease-in-out;
+}
+.chatbot-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+    margin: 10px;
+  }
+  .dashboard--content {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
