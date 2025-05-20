@@ -2,12 +2,11 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 
-function SignInForm() {
+function SignInForm({ setUser }) {
   const [state, setState] = React.useState({
     email: "",
     password: "",
   });
-
   const navigate = useNavigate();
 
   const handleChange = (evt) => {
@@ -20,7 +19,6 @@ function SignInForm() {
 
   const handleOnSubmit = async (evt) => {
     evt.preventDefault();
-
     const { email, password } = state;
 
     try {
@@ -35,16 +33,13 @@ function SignInForm() {
       const data = await response.json();
 
       if (response.ok) {
-        //setUser(data.user);
-        console.log("Login success:", data);
-
+        localStorage.setItem("user", JSON.stringify(data.user)); 
+        setUser(data.user);
         navigate("/dashboard");
       } else {
         console.error("Login failed:", data);
         alert(data.error || "Login failed");
-        return;
       }
-      // Save user info, navigate, etc.
     } catch (err) {
       console.error("Server error:", err);
       alert("Server is not responding");
@@ -60,11 +55,11 @@ function SignInForm() {
           className="logo"
           onClick={() => navigate("/")}
           style={{ cursor: "pointer" }}
-        ></img>
+        />
         <h1>Sign in</h1>
         <input
           type="email"
-          placeholder=" Type your Email "
+          placeholder="Type your Email"
           name="email"
           value={state.email}
           onChange={handleChange}
@@ -72,7 +67,7 @@ function SignInForm() {
         <input
           type="password"
           name="password"
-          placeholder=" Type your Password"
+          placeholder="Type your Password"
           value={state.password}
           onChange={handleChange}
         />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Hero from "./components/Hero/Hero";
 import Programs from "./components/Programs/programs";
@@ -47,24 +47,19 @@ const MainPage = () => {
 };
 
 const App = () => {
+  const [user, setUser] = useState(null); // ✅ Track logged-in user
+
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route
-          path="/auth"
-          element={
-            <>
-              <Auth />
-            </>
-          }
-        />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/auth" element={<Auth setUser={setUser} />} /> 
+        <Route path="/dashboard" element={<Dashboard user={user} />} /> 
         <Route path="/password-reset" element={<PasswordReset />} />
         <Route path="/info" element={<InfoPage />} />
         <Route path="/company-info" element={<CompanyInfo />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 };
 

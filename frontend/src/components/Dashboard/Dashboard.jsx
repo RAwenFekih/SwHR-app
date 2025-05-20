@@ -72,13 +72,28 @@ const Dashboard = () => {
         overflowY: "auto",
         zIndex: 1000,
       };
+const Dashboard = ({ user }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
-  // Removed userInput state because no free text input allowed for now
+  const [userData, setUserData] = useState(null);
+
+  // ✅ Parse user from localStorage
+  const storedUser = localStorage.getItem("user");
+  console.log(storedUser)
+  const userId = storedUser ? JSON.parse(storedUser).id : null;
+  console.log(userId)
+
+  useEffect(() => {
+    if (!userId) return;
+
+    fetch(`http://localhost:8081/api/users/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setUserData(data))
+      .catch((err) => console.error("User fetch error:", err));
+  }, [userId]);
 
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
-
     if (!isChatOpen && messages.length === 0) {
       setMessages([
         {
@@ -133,6 +148,10 @@ const Dashboard = () => {
             </div>
           </>
         )}
+      <Siderbar />
+      <div className="dashboard--content">
+        <Content />
+        <Profile user={userData} />
       </div>
 
       <img
@@ -161,9 +180,8 @@ const Dashboard = () => {
             ))}
           </div>
 
-          {/* Display option buttons instead of text input */}
           <div className="chatbot-options">
-            {options.map((opt) => (
+            {["🏖 Submit leave/vacation request", "🔄 View request status", "📨 Check assignments", "Chat Freely with me"].map((opt) => (
               <button
                 key={opt}
                 onClick={() => handleOptionClick(opt)}
