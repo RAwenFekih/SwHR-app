@@ -1,5 +1,7 @@
 .content {
   width: 75%;
+  background: #fff;
+  padding: 2rem;
 }
 .content--header {
   display: flex;
@@ -7,10 +9,10 @@
   justify-content: space-between;
 }
 .header--title {
-  color: #27374d;
+  color: #174b6e;
   font-weight: 700;
   font-size: 1.5rem;
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: "Outfit", sans-serif;
 }
 .header--activity {
   display: flex;
@@ -18,7 +20,7 @@
   gap: 20px;
 }
 .search-box {
-  background: #a2c7de;
+  background: #007bff;
   padding: 8px 10px;
   border-radius: 10px;
   display: flex;
@@ -29,20 +31,23 @@
   outline: none;
   background: transparent;
   padding: 5px;
-  font-family: "Roboto", Arial, sans-serif;
-  color: #063c5e;
+  font-family: "Outfit", sans-serif;
+  color: #fff;
+}
+.search-box input::placeholder {
+  color: #fff;
 }
 .search-box .icon {
-  color: #20597d;
+  color: #fff;
   font-size: 22px;
   cursor: pointer;
   transition: 0.5s ease-in-out;
 }
 .notify {
-  background: #a2c7de;
+  background: #007bff;
   padding: 12px;
   border-radius: 10px;
-  color: #20597d;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,32 +71,48 @@
 .card {
   flex: 1;
   padding: 20px;
-  border-radius: 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
   gap: 20px;
   transition: 0.5s ease-in-out;
+  background: #f8f9fa;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  height: 200px;
 }
 .card:hover {
   transform: scale(1.04);
   cursor: pointer;
+  box-shadow: 0 6px 15px rgba(160, 206, 255, 0.7);
+}
+.card.selected {
+  background-color: #4c8ed461;
+  color: white;
+  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.7);
+}
+.card.selected .card--cover {
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.7);
+}
+.card.selected .card--title {
+  color: white;
 }
 .card--cover {
-  background: #c8e0ee;
   font-size: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  border-radius: 20px;
-  color: #063c5e;
+
+  color: #007bff;
+  box-shadow: 0 4px 10px rgba(160, 206, 255, 0.7);
 }
 .card--title {
   text-align: center;
   padding: 10px 0;
   font-size: 13px;
-  color: #20597d;
+  color: #174b6e;
   border-radius: 10px;
 }
 

@@ -2,14 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BiHome,
-  BiBookAlt,
-  BiMessage,
   BiSolidReport,
   BiStats,
   BiTask,
   BiHelpCircle,
 } from "react-icons/bi";
 import "./Siderbar.css";
+import logo1 from "../../assets/logo.png";
 
 const Siderbar = () => {
   const navigate = useNavigate();
@@ -17,12 +16,11 @@ const Siderbar = () => {
   return (
     <div className="menu">
       <div
-        className="logo"
+        className="logo1"
         onClick={() => navigate("/")}
         style={{ cursor: "pointer" }}
       >
-        <BiBookAlt className="logo-icon" />
-        <h2>SwHR</h2>
+        <img className="logo1" src={logo1} alt=""></img>
       </div>
       <div className="menu--list">
         <a href="#" className="item active">
@@ -31,19 +29,15 @@ const Siderbar = () => {
         </a>
         <a href="#" className="item">
           <BiTask className="icon" />
-          Assignment
+          Requests
         </a>
         <a href="#" className="item">
           <BiSolidReport className="icon" />
-          Reports
+          Documents
         </a>
         <a href="#" className="item">
           <BiStats className="icon" />
-          Stats
-        </a>
-        <a href="#" className="item">
-          <BiMessage className="icon" />
-          Message
+          Performance
         </a>
         <a href="#" className="item">
           <BiHelpCircle className="icon" />

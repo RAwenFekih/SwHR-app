@@ -1,7 +1,7 @@
 .profile {
   flex: 1;
-  font-family: "Roboto", Arial, sans-serif;
-  color: #526d82;
+  background: #ffffff;
+  padding: 2rem;
 }
 .profile--header {
   display: flex;
@@ -9,29 +9,33 @@
   justify-content: space-between;
 }
 .edit {
-  background: #a2c7de;
+  background: #007bff;
   padding: 12px;
   border-radius: 10px;
-  color: #20597d;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Roboto", Arial, sans-serif;
 }
 .edit .icon {
   font-size: 20px;
-  transition: 0.3s ease-in-out;
+  transition: 0.5s ease-in-out;
 }
+.icon:hover {
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
 .user--profile {
-  height: 90%;
+  height: 225px;
   width: 300px;
   margin-top: 2rem;
-  background: #a2c7de;
-  border-radius: 10px;
+  background: #f8f9fa;
   display: flex;
   flex-direction: column;
   padding: 10px;
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: "Outfit", sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 .user--details {
   width: 100%;
@@ -42,40 +46,41 @@
   justify-content: center;
 }
 .user--details img {
-  background: #e6fcff;
+  background: transparent;
   border-radius: 50%;
   width: 150px;
+  box-shadow: 0 0 5px #007bff;
 }
 .user--details .username {
-  color: #063c5e;
+  color: #174b6e;
   font-weight: 700;
   font-size: 1.2rem;
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: "Outfit", sans-serif;
   padding-top: 10px;
 }
 .user-informations {
-  flex: 1;
+  width: 100%;
   border-radius: 10px;
-  padding: 20px;
+  padding: 0;
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  font-family: "Roboto", Arial, sans-serif;
-  color: #526d82;
 }
 
 .info {
-  background: #063c5e;
-  padding: 10px;
+  background: #f8f9fa;
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 10px;
-  font-family: "Roboto", Arial, sans-serif;
-  color: #e6fcff;
-  padding: center;
+  font-family: "Outfit", sans-serif;
+  color: #174b6e;
   height: 50px;
-  width: 250px;
+  width: 280px;
+  cursor: default;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 .info--detail {
   display: flex;
@@ -83,20 +88,19 @@
   align-items: center;
 }
 .info--cover {
-  background: #e6fcff;
-  width: 30px;
-  height: 30px;
+  background: transparent;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
   font-size: 20px;
-  color: #27374d;
+  color: #007bff;
 }
 .info .age {
   font-size: 15px;
-  font-family: "Roboto", Arial, sans-serif;
-  color: #e6fcff;
+  font-family: "Outfit", sans-serif;
+  color: #174b6e;
 }
 .cource .action {
   font-weight: 700;
@@ -104,6 +108,6 @@
   padding: center;
 }
 .profession {
-  color: #0d3767;
-  font-family: "Roboto", Arial, sans-serif;
+  color: #007bff;
+  font-family: "Outfit", sans-serif;
 }
