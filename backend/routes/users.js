@@ -7,7 +7,7 @@ router.get("/:id", (req, res) => {
 
   const sql = `
     SELECT user_id, name, email, age, nationality, role, 
-           total_vacation_days, vacation_days_left, year
+           total_vacation_days, vacation_days_left, year, sex
     FROM users WHERE user_id = ?
   `;
 
