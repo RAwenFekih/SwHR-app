@@ -13,7 +13,7 @@ const Profile = ({ user }) => {
 
   const informations = [
     {
-      label: 'female',
+      label: user.sex,
       icon: <PiGenderIntersexBold />,
     },
     {
