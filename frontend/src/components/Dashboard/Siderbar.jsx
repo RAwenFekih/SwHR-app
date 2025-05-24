@@ -10,39 +10,64 @@ import {
 import "./Siderbar.css";
 import logo1 from "../../assets/logo.png";
 
-const Siderbar = () => {
+const Siderbar = ({ selectedPage, onSelectPage }) => {
   const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    onSelectPage("Dashboard");
+    navigate("/");
+  };
 
   return (
     <div className="menu">
       <div
         className="logo1"
-        onClick={() => navigate("/")}
+        onClick={handleLogoClick}
         style={{ cursor: "pointer" }}
       >
         <img className="logo1" src={logo1} alt=""></img>
       </div>
       <div className="menu--list">
-        <a href="#" className="item active">
+        <div
+          className={`item ${selectedPage === "Dashboard" ? "active" : ""}`}
+          onClick={() => onSelectPage("Dashboard")}
+          style={{ cursor: "pointer" }}
+        >
           <BiHome className="icon" />
           Dashboard
-        </a>
-        <a href="#" className="item">
+        </div>
+        <div
+          className={`item ${selectedPage === "Requests" ? "active" : ""}`}
+          onClick={() => onSelectPage("Requests")}
+          style={{ cursor: "pointer" }}
+        >
           <BiTask className="icon" />
           Requests
-        </a>
-        <a href="#" className="item">
+        </div>
+        <div
+          className={`item ${selectedPage === "Documents" ? "active" : ""}`}
+          onClick={() => onSelectPage("Documents")}
+          style={{ cursor: "pointer" }}
+        >
           <BiSolidReport className="icon" />
           Documents
-        </a>
-        <a href="#" className="item">
+        </div>
+        <div
+          className={`item ${selectedPage === "Performance" ? "active" : ""}`}
+          onClick={() => onSelectPage("Performance")}
+          style={{ cursor: "pointer" }}
+        >
           <BiStats className="icon" />
           Performance
-        </a>
-        <a href="#" className="item">
+        </div>
+        <div
+          className={`item ${selectedPage === "Help" ? "active" : ""}`}
+          onClick={() => onSelectPage("Help")}
+          style={{ cursor: "pointer" }}
+        >
           <BiHelpCircle className="icon" />
           Help
-        </a>
+        </div>
       </div>
     </div>
   );
