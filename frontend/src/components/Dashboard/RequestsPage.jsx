@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./RequestsPage.css";
 
+function generateUUID() {
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
+    /[018]/g,
+    (c) => c ^ crypto.getRandomValues(new Uint8Array(1))[0].toString(16)
+  );
+}
+
 const RequestsPage = () => {
   const [leaveType, setLeaveType] = useState("vacation");
   const [startDate, setStartDate] = useState("");
@@ -11,6 +21,9 @@ const RequestsPage = () => {
   const [daysRequested, setDaysRequested] = useState(0);
   const [submittedData, setSubmittedData] = useState(null);
   const [error, setError] = useState("");
+
+    const storedUser = localStorage.getItem("user");
+  const userId = storedUser ? JSON.parse(storedUser).id : null;
 
   // Calculate days requested whenever startDate or endDate changes
   useEffect(() => {
@@ -32,32 +45,68 @@ const RequestsPage = () => {
       setError("");
     }
   }, [startDate, endDate]);
+  
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!startDate || !endDate) {
-      setError("Please select both start and end dates");
-      return;
-    }
-    if (daysRequested <= 0) {
-      setError("Invalid date range");
-      return;
-    }
-    const now = new Date();
-    setRequestDate(now.toISOString());
-    setStatus("pending");
+  if (!startDate || !endDate) {
+    setError("Please select both start and end dates");
+    return;
+  }
 
-    const data = {
-      leaveType,
-      startDate,
-      endDate,
-      status: "pending",
-      requestDate: now.toISOString(),
-      daysRequested,
-    };
-    setSubmittedData(data);
-    setError("");
+  if (daysRequested <= 0) {
+    setError("Invalid date range");
+    return;
+  }
+
+  const requestPayload = {
+    user_id: userId, // Replace with real user ID (maybe from context or auth)
+    leave_type: leaveType,
+    start_date: startDate,
+    end_date: endDate,
+    description: "", // or pass from a description input if you have one
   };
+
+  try {
+    console.log("user id",userId)
+    const response = await fetch("http://localhost:8081/api/requests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Request-ID": requestPayload.request_id || generateUUID(),
+        },
+        body: JSON.stringify({
+          ...requestPayload,
+          status: "pending",
+          created_at: new Date().toISOString(),
+          user_id: userId,
+          days_requested: requestPayload.days_requested || 0,
+        }),
+      });
+
+    const result = await response.json();
+
+    if (response.ok && result.success) {
+      setSubmittedData({
+        leaveType: requestPayload.leave_type,
+        startDate: requestPayload.start_date,
+        endDate: requestPayload.end_date,
+        status: "pending",
+        requestDate: new Date().toISOString(),
+        daysRequested: result.daysRequested,
+      });
+      setError("");
+    } else {
+      setSubmittedData(null);
+      setError(result.error || "Submission failed. Please try again.");
+    }
+  } catch (err) {
+    console.error("Submission error:", err);
+    setSubmittedData(null);
+    setError("Network error or server not responding.");
+  }
+};
+
 
   return (
     <div className="container_1">
@@ -73,8 +122,8 @@ const RequestsPage = () => {
           >
             <option value="vacation">Vacation</option>
             <option value="wedding">Wedding</option>
-            <option value="child born">Child Born</option>
-            <option value="relatives death">Relatives Death</option>
+            <option value="child_born">Child Born</option>
+            <option value="relatives_death">Relatives Death</option>
           </select>
         </label>
         <label className="label_1">
