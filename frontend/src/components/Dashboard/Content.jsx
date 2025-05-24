@@ -9,31 +9,29 @@ const documents = [
   {
     id: 1,
     title: "Employee Contract",
-    date: "2024-01-15",
-    description: "Contract document for Joe Doe",
+    date: "2023-01-01",
+    description: "Contract document",
   },
   {
     id: 2,
     title: "Performance Review",
-    date: "2024-06-10",
-    description: "Mid-year performance review for Joe Doe",
+    date: "2025-01-10",
+    description: "Mid-year performance review",
   },
   {
     id: 3,
     title: "Training Certificate",
     date: "2024-03-22",
-    description: "Completed React training by Joe Doe",
+    description: "Completed React training",
   },
 ];
 
 const requests = [
   {
     id: 1,
-    title: "Vacation",
-    date: "01-06-2025 / 15-06-2025",
-    description: "Request for vaction",
-    days: 15,
-    status: "Approved",
+    title: "Leave Request",
+    date: "2025-04-01",
+    description: "Request for annual leave",
   },
 
   {
@@ -55,9 +53,9 @@ const requests = [
 ];
 
 const performances = [
-  { id: 1, date: "2024-01", score: 75 },
-  { id: 2, date: "2024-02", score: 80 },
-  { id: 3, date: "2024-03", score: 85 },
+  { id: 1, date: "2025-01", score: 75 },
+  { id: 2, date: "2025-02", score: 80 },
+  { id: 3, date: "2025-03", score: 85 },
   { id: 4, date: "2024-04", score: 90 },
   { id: 5, date: "2024-05", score: 88 },
   { id: 6, date: "2024-06", score: 92 },

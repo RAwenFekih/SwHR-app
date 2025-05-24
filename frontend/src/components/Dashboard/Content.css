@@ -87,17 +87,14 @@
   box-shadow: 0 6px 15px rgba(160, 206, 255, 0.7);
 }
 .card.selected {
-  background-color: #4c8ed461;
-  color: white;
+  background-color: #91b8e361;
   box-shadow: 0 6px 15px rgba(0, 123, 255, 0.7);
 }
+
 .card.selected .card--cover {
-  color: white;
   box-shadow: 0 4px 10px rgba(0, 123, 255, 0.7);
 }
-.card.selected .card--title {
-  color: white;
-}
+
 .card--cover {
   font-size: 3rem;
   display: flex;

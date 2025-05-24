@@ -5,8 +5,9 @@ const cors = require("cors");
 const chatRoutes = require('./routes/chat');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
-const passwordResetHandler = require("./passwordReset");
+//const passwordResetHandler = require("./passwordReset");
 const db = require("./db");
+const requestRoutes = require("./routes/requests");
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use('/api/users', userRoutes);
+app.use("/api/requests", requestRoutes); 
 
 
 app.use((req, res) => {

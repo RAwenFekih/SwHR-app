@@ -73,19 +73,29 @@ const Dashboard = () => {
         zIndex: 1000,
       };
 const Dashboard = ({ user }) => {
+function generateUUID() {
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
+    /[018]/g,
+    (c) => c ^ crypto.getRandomValues(new Uint8Array(1))[0].toString(16)
+  );
+}
+
+const Dashboard = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [userData, setUserData] = useState(null);
+  const [chatState, setChatState] = useState(null);
+  const [requestData, setRequestData] = useState({});
+  const [userInput, setUserInput] = useState("");
 
-  // ✅ Parse user from localStorage
   const storedUser = localStorage.getItem("user");
-  console.log(storedUser)
   const userId = storedUser ? JSON.parse(storedUser).id : null;
-  console.log(userId)
 
   useEffect(() => {
     if (!userId) return;
-
     fetch(`http://localhost:8081/api/users/${userId}`)
       .then((res) => res.json())
       .then((data) => setUserData(data))
@@ -99,28 +109,293 @@ const Dashboard = ({ user }) => {
         {
           role: "assistant",
           content:
-            "Hello! 😊 I'm your HR assistant. How can I help you? Please choose an option below:"
-        }
+            "Hello! 😊 I'm your HR assistant. How can I help you today? Please choose an option below:",
+        },
       ]);
     }
   };
 
-  const handleOptionClick = async (option) => {
-    const newUserMessage = { role: "user", content: option };
-    setMessages((prev) => [...prev, newUserMessage]);
+  const handleOptionClick = (option) => {
+    setMessages((prev) => [...prev, { role: "user", content: option }]);
 
+    if (option.includes("Submit leave")) {
+      setChatState("leave_type");
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "Great! What type of leave would you like to request?\n\n" +
+            "Available options:\n" +
+            "1. Vacation 🏖\n" +
+            "2. Wedding 💒\n" +
+            "3. Child born 👶\n" +
+            "4. Relative's death 😢",
+        },
+      ]);
+    } else if (option.includes("View request status")) {
+      if (!userId) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "❌ You need to be logged in to view your requests.",
+          },
+        ]);
+        return;
+      }
+
+      fetch(`http://localhost:8081/api/requests/user/${userId}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to fetch requests");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data.length === 0) {
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: "assistant",
+                content: "📭 You have no leave requests yet.",
+              },
+            ]);
+            return;
+          }
+
+          const formatted = data
+            .map(
+              (req) =>
+                `🔹 Type: ${req.leave_type.replace(/_/g, " ")}\n` +
+                `📅 ${req.start_date} → ${req.end_date} (${req.days_requested} days)\n` +
+                `📌 Status: ${req.status}`
+            )
+            .join("\n\n");
+
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: `📋 Your Leave Requests:\n\n${formatted}`,
+            },
+          ]);
+        })
+        .catch((error) => {
+          console.error("Error fetching leave requests:", error);
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: `❌ Error fetching your leave requests. Please try again later.`,
+            },
+          ]);
+        });
+    } else if (option.includes("Check assignments")) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "This feature is coming soon!" },
+      ]);
+    } else {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "I'm not sure how to help with that yet.",
+        },
+      ]);
+    }
+  };
+
+  const submitLeaveRequest = async (payload) => {
     try {
-      const response = await fetch("http://localhost:8081/api/chat", {
+      const response = await fetch("http://localhost:8081/api/requests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: option })
+        headers: {
+          "Content-Type": "application/json",
+          "X-Request-ID": payload.request_id || generateUUID(),
+        },
+        body: JSON.stringify({
+          ...payload,
+          status: "pending",
+          created_at: new Date().toISOString(),
+          user_id: userId,
+          days_requested: payload.days_requested || 0,
+        }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `Server error: ${response.status}`
+        );
+      }
+
       const data = await response.json();
-      const botReply = { role: "assistant", content: data.response };
-      setMessages((prevMessages) => [...prevMessages, botReply]);
+      if (!data) {
+        throw new Error("No response from server");
+      }
+      return data;
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Leave request submission error:", error);
+      throw new Error(
+        error.message || "Failed to submit leave request. Please try again."
+      );
+    }
+  };
+
+  const handleUserInputSubmit = async () => {
+    if (!userInput.trim()) return;
+
+    const input = userInput.trim();
+    setMessages((prev) => [...prev, { role: "user", content: input }]);
+    setUserInput("");
+
+    try {
+      if (!userId) {
+        throw new Error("You must be logged in to submit a leave request");
+      }
+
+      if (chatState === "leave_type") {
+        const leaveTypeMap = {
+          1: "vacation",
+          vacation: "vacation",
+          2: "wedding",
+          wedding: "wedding",
+          3: "child_born",
+          "child born": "child_born",
+          child: "child_born",
+          4: "relatives_death",
+          "relative death": "relatives_death",
+          death: "relatives_death",
+        };
+
+        const leaveType = leaveTypeMap[input.toLowerCase()];
+        if (!leaveType) {
+          throw new Error(
+            "Please select a valid leave type (1-4):\n" +
+              "1. Vacation\n2. Wedding\n3. Child born\n4. Relative's death"
+          );
+        }
+
+        setRequestData({
+          leave_type: leaveType,
+          user_id: userId,
+          request_id: generateUUID(),
+        });
+        setChatState("start_date");
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "📅 When should the leave start? (YYYY-MM-DD)",
+          },
+        ]);
+        return;
+      }
+
+      if (chatState === "start_date") {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+          throw new Error("Invalid date format. Please use YYYY-MM-DD");
+        }
+
+        const startDate = new Date(input);
+        if (startDate < new Date()) {
+          throw new Error("Start date must be in the future");
+        }
+
+        setRequestData((prev) => ({ ...prev, start_date: input }));
+        setChatState("end_date");
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: "📅 When should it end? (YYYY-MM-DD)" },
+        ]);
+        return;
+      }
+
+      if (chatState === "end_date") {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+          throw new Error("Invalid date format. Please use YYYY-MM-DD");
+        }
+
+        const endDate = new Date(input);
+        const startDate = new Date(requestData.start_date);
+
+        if (isNaN(endDate.getTime()) || isNaN(startDate.getTime())) {
+          throw new Error("Invalid date. Please enter a valid date.");
+        }
+
+        if (endDate <= startDate) {
+          throw new Error("End date must be after start date");
+        }
+
+        const diffTime = Math.abs(endDate - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+        setRequestData((prev) => ({
+          ...prev,
+          end_date: input,
+          days_requested: diffDays,
+        }));
+
+        setChatState("description");
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: "📝 Any additional notes? (Optional)" },
+        ]);
+        return;
+      }
+
+      if (chatState === "description") {
+        const endDate = new Date(requestData.end_date);
+        const startDate = new Date(requestData.start_date);
+        const diffTime = Math.abs(endDate - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        console.log(diffDays);
+
+        const payload = {
+          ...requestData,
+          description: input || "No additional notes provided",
+          days_requested: diffDays,
+        };
+
+        console.log("Submitting leave request:", payload);
+        const result = await submitLeaveRequest(payload);
+
+        if (!result) {
+          throw new Error("Failed to submit request - no response from server");
+        }
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              `✅ Leave request submitted successfully!\n\n` +
+              `🔹 Type: ${requestData.leave_type.replace(/_/g, " ")}\n` +
+              `🔹 Dates: ${requestData.start_date} to ${requestData.end_date}\n` +
+              `🔹 Days: ${diffDays}\n` +
+              `🔹 Status: Pending\n` +
+              (result.remainingDays !== undefined
+                ? `🔹 Remaining: ${result.remainingDays} days`
+                : ""),
+          },
+        ]);
+
+        setChatState(null);
+        setRequestData({});
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            `❌ ${error.message}\n\n` +
+            "Please try again or contact HR if the problem persists.",
+        },
+      ]);
     }
   };
 
@@ -181,16 +456,43 @@ const Dashboard = ({ user }) => {
           </div>
 
           <div className="chatbot-options">
-            {["🏖 Submit leave/vacation request", "🔄 View request status", "📨 Check assignments", "Chat Freely with me"].map((opt) => (
-              <button
-                key={opt}
-                onClick={() => handleOptionClick(opt)}
-                className="option-button"
-              >
-                {opt}
-              </button>
-            ))}
+            {!chatState &&
+              [
+                "🏖 Submit leave/vacation request",
+                "🔄 View request status",
+                /*"📨 Check assignments",*/
+                "💬 Other questions",
+              ].map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => handleOptionClick(opt)}
+                  className="option-button"
+                >
+                  {opt}
+                </button>
+              ))}
           </div>
+
+          {chatState && (
+            <div className="chatbot-input">
+              <input
+                type="text"
+                value={userInput}
+                placeholder={
+                  chatState === "leave_type"
+                    ? "Enter leave type (1-4)"
+                    : chatState === "start_date"
+                    ? "Enter start date (YYYY-MM-DD)"
+                    : chatState === "end_date"
+                    ? "Enter end date (YYYY-MM-DD)"
+                    : "Type your notes..."
+                }
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleUserInputSubmit()}
+              />
+              <button onClick={handleUserInputSubmit}>Send</button>
+            </div>
+          )}
         </div>
       )}
     </div>
