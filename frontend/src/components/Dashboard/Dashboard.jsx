@@ -10,69 +10,6 @@ import AddEmployee from "../AddEmployee/AddEmployee";
 import chatbotIcon from "../../assets/chatbot1.png";
 import "./Dashboard.css";
 
-const options = [
-  "🏖 Submit leave/vacation request",
-  "🔄 View request status",
-  "📨 Check assignments",
-  "Chat Freely with me"
-];
-
-const Dashboard = () => {
-  const [selectedPage, setSelectedPage] = useState("Dashboard");
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const renderPage = () => {
-    switch (selectedPage) {
-      case "Requests":
-        return <RequestsPage />;
-      case "Documents":
-        return <DocumentsPage />;
-      case "Performance":
-        return <PerformancePage />;
-      case "Help":
-        return <HelpPage />;
-      case "Add Employee":
-        return <AddEmployee />;
-      case "Dashboard":
-      default:
-        return <Content />;
-    }
-  };
-
-  const profileContainerStyle = isSmallScreen
-    ? {
-        width: "100%",
-        height: "500px",
-        position: "static",
-        boxShadow: "none",
-        borderRadius: 0,
-        padding: "10px",
-        overflowY: "visible",
-        zIndex: "auto",
-      }
-    : {
-        width: "400px",
-        height: "100vh",
-        position: "fixed",
-        right: "0",
-        top: "0",
-        backgroundColor: "white",
-        boxShadow: "0 0 15px rgba(0, 123, 255, 0.5)",
-        borderRadius: "10px 0 0 10px",
-        padding: "20px",
-        overflowY: "auto",
-        zIndex: 1000,
-      };
-const Dashboard = ({ user }) => {
 function generateUUID() {
   if (window.crypto?.randomUUID) {
     return window.crypto.randomUUID();
@@ -84,6 +21,8 @@ function generateUUID() {
 }
 
 const Dashboard = () => {
+  const [selectedPage, setSelectedPage] = useState("Dashboard");
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [userData, setUserData] = useState(null);
@@ -93,6 +32,13 @@ const Dashboard = () => {
 
   const storedUser = localStorage.getItem("user");
   const userId = storedUser ? JSON.parse(storedUser).id : null;
+
+  useEffect(() => {
+    const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (!userId) return;
@@ -146,43 +92,29 @@ const Dashboard = () => {
       }
 
       fetch(`http://localhost:8081/api/requests/user/${userId}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to fetch requests");
-          }
-          return res.json();
-        })
+        .then((res) => res.json())
         .then((data) => {
-          if (data.length === 0) {
+          if (!data.length) {
             setMessages((prev) => [
               ...prev,
-              {
-                role: "assistant",
-                content: "📭 You have no leave requests yet.",
-              },
+              { role: "assistant", content: "📭 You have no leave requests yet." },
             ]);
-            return;
+          } else {
+            const formatted = data
+              .map(
+                (req) =>
+                  `🔹 Type: ${req.leave_type.replace(/_/g, " ")}\n📅 ${req.start_date} → ${req.end_date} (${req.days_requested} days)\n📌 Status: ${req.status}`
+              )
+              .join("\n\n");
+
+            setMessages((prev) => [
+              ...prev,
+              { role: "assistant", content: `📋 Your Leave Requests:\n\n${formatted}` },
+            ]);
           }
-
-          const formatted = data
-            .map(
-              (req) =>
-                `🔹 Type: ${req.leave_type.replace(/_/g, " ")}\n` +
-                `📅 ${req.start_date} → ${req.end_date} (${req.days_requested} days)\n` +
-                `📌 Status: ${req.status}`
-            )
-            .join("\n\n");
-
-          setMessages((prev) => [
-            ...prev,
-            {
-              role: "assistant",
-              content: `📋 Your Leave Requests:\n\n${formatted}`,
-            },
-          ]);
         })
-        .catch((error) => {
-          console.error("Error fetching leave requests:", error);
+        .catch((err) => {
+          console.error("Error fetching leave requests:", err);
           setMessages((prev) => [
             ...prev,
             {
@@ -191,11 +123,6 @@ const Dashboard = () => {
             },
           ]);
         });
-    } else if (option.includes("Check assignments")) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "This feature is coming soon!" },
-      ]);
     } else {
       setMessages((prev) => [
         ...prev,
@@ -226,16 +153,10 @@ const Dashboard = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.message || `Server error: ${response.status}`
-        );
+        throw new Error(errorData.message || `Server error: ${response.status}`);
       }
 
-      const data = await response.json();
-      if (!data) {
-        throw new Error("No response from server");
-      }
-      return data;
+      return await response.json();
     } catch (error) {
       console.error("Leave request submission error:", error);
       throw new Error(
@@ -252,9 +173,7 @@ const Dashboard = () => {
     setUserInput("");
 
     try {
-      if (!userId) {
-        throw new Error("You must be logged in to submit a leave request");
-      }
+      if (!userId) throw new Error("You must be logged in to submit a leave request");
 
       if (chatState === "leave_type") {
         const leaveTypeMap = {
@@ -266,16 +185,11 @@ const Dashboard = () => {
           "child born": "child_born",
           child: "child_born",
           4: "relatives_death",
-          "relative death": "relatives_death",
           death: "relatives_death",
         };
-
         const leaveType = leaveTypeMap[input.toLowerCase()];
         if (!leaveType) {
-          throw new Error(
-            "Please select a valid leave type (1-4):\n" +
-              "1. Vacation\n2. Wedding\n3. Child born\n4. Relative's death"
-          );
+          throw new Error("Please select a valid leave type (1-4).");
         }
 
         setRequestData({
@@ -286,10 +200,7 @@ const Dashboard = () => {
         setChatState("start_date");
         setMessages((prev) => [
           ...prev,
-          {
-            role: "assistant",
-            content: "📅 When should the leave start? (YYYY-MM-DD)",
-          },
+          { role: "assistant", content: "📅 When should the leave start? (YYYY-MM-DD)" },
         ]);
         return;
       }
@@ -314,30 +225,20 @@ const Dashboard = () => {
       }
 
       if (chatState === "end_date") {
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(input)) {
-          throw new Error("Invalid date format. Please use YYYY-MM-DD");
-        }
-
         const endDate = new Date(input);
         const startDate = new Date(requestData.start_date);
-
-        if (isNaN(endDate.getTime()) || isNaN(startDate.getTime())) {
-          throw new Error("Invalid date. Please enter a valid date.");
-        }
-
         if (endDate <= startDate) {
           throw new Error("End date must be after start date");
         }
 
-        const diffTime = Math.abs(endDate - startDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        const diffDays =
+          Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
 
         setRequestData((prev) => ({
           ...prev,
           end_date: input,
           days_requested: diffDays,
         }));
-
         setChatState("description");
         setMessages((prev) => [
           ...prev,
@@ -347,24 +248,11 @@ const Dashboard = () => {
       }
 
       if (chatState === "description") {
-        const endDate = new Date(requestData.end_date);
-        const startDate = new Date(requestData.start_date);
-        const diffTime = Math.abs(endDate - startDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-        console.log(diffDays);
-
         const payload = {
           ...requestData,
           description: input || "No additional notes provided",
-          days_requested: diffDays,
         };
-
-        console.log("Submitting leave request:", payload);
         const result = await submitLeaveRequest(payload);
-
-        if (!result) {
-          throw new Error("Failed to submit request - no response from server");
-        }
 
         setMessages((prev) => [
           ...prev,
@@ -374,7 +262,7 @@ const Dashboard = () => {
               `✅ Leave request submitted successfully!\n\n` +
               `🔹 Type: ${requestData.leave_type.replace(/_/g, " ")}\n` +
               `🔹 Dates: ${requestData.start_date} to ${requestData.end_date}\n` +
-              `🔹 Days: ${diffDays}\n` +
+              `🔹 Days: ${requestData.days_requested}\n` +
               `🔹 Status: Pending\n` +
               (result.remainingDays !== undefined
                 ? `🔹 Remaining: ${result.remainingDays} days`
@@ -386,18 +274,56 @@ const Dashboard = () => {
         setRequestData({});
       }
     } catch (error) {
-      console.error("Submission error:", error);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content:
-            `❌ ${error.message}\n\n` +
-            "Please try again or contact HR if the problem persists.",
+          content: `❌ ${error.message}\nPlease try again.`,
         },
       ]);
     }
   };
+
+  const renderPage = () => {
+    switch (selectedPage) {
+      case "Requests":
+        return <RequestsPage />;
+      case "Documents":
+        return <DocumentsPage />;
+      case "Performance":
+        return <PerformancePage />;
+      case "Help":
+        return <HelpPage />;
+      case "Dashboard":
+      default:
+        return <Content />;
+    }
+  };
+
+  const profileContainerStyle = isSmallScreen
+    ? {
+        width: "100%",
+        height: "auto",
+        position: "static",
+        boxShadow: "none",
+        borderRadius: 0,
+        padding: "10px",
+        overflowY: "visible",
+        zIndex: "auto",
+      }
+    : {
+        width: "400px",
+        height: "100vh",
+        position: "fixed",
+        right: "0",
+        top: "0",
+        backgroundColor: "white",
+        boxShadow: "0 0 15px rgba(0, 123, 255, 0.5)",
+        borderRadius: "10px 0 0 10px",
+        padding: "20px",
+        overflowY: "auto",
+        zIndex: 1000,
+      };
 
   return (
     <div className="dashboard">
@@ -406,27 +332,18 @@ const Dashboard = () => {
         {selectedPage === "Dashboard" ? (
           <>
             {renderPage()}
-            <Profile />
+            <Profile user={userData} />
           </>
         ) : (
           <>
             <div style={profileContainerStyle}>
-              <Profile />
+              <Profile user={userData} />
             </div>
-            <div
-              style={{
-                marginRight: isSmallScreen ? "0" : "350px",
-                flexGrow: 1,
-              }}
-            >
+            <div style={{ marginRight: isSmallScreen ? "0" : "350px", flexGrow: 1 }}>
               {renderPage()}
             </div>
           </>
         )}
-      <Siderbar />
-      <div className="dashboard--content">
-        <Content />
-        <Profile user={userData} />
       </div>
 
       <img
@@ -445,10 +362,7 @@ const Dashboard = () => {
 
           <div className="chatbot-messages">
             {messages.map((msg, index) => (
-              <div
-                key={`${msg.role}-${index}-${msg.content}`}
-                className={`message ${msg.role}`}
-              >
+              <div key={`${msg.role}-${index}`} className={`message ${msg.role}`}>
                 <strong>{msg.role === "user" ? "You" : "Assistant"}:</strong>{" "}
                 {msg.content}
               </div>
@@ -460,7 +374,6 @@ const Dashboard = () => {
               [
                 "🏖 Submit leave/vacation request",
                 "🔄 View request status",
-                /*"📨 Check assignments",*/
                 "💬 Other questions",
               ].map((opt) => (
                 <button

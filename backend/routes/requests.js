@@ -198,7 +198,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Example in Express.js
 router.get('/user/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
@@ -212,10 +211,9 @@ router.get('/user/:userId', async (req, res) => {
                     return reject(new Error("User not found"));
                 }
 
-                resolve(result); // Return first user object
+                resolve(result); 
             });
         });
-    //const [rows] = await db.promise().query(, [userId]);
     res.json(rows);
   } catch (err) {
     console.error("DB error:", err);
