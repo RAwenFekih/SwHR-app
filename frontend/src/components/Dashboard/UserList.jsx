@@ -122,8 +122,8 @@ console.log("data2", data);
             {data.map((item) => (
               <tr key={item.id}>
                 <td>{translateText(item.leave_type)}</td>
-                <td>{item.start_date}</td>
-                <td>{item.end_date}</td>
+                <td>{item.start_date.split('T')[0]}</td>
+                <td>{item.end_date.split('T')[0]}</td>
                 <td>{item.days_requested !== undefined ? item.days_requested : "-"}</td>
                 <td>{item.status || "-"}</td>
               </tr>

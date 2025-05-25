@@ -7,7 +7,7 @@ export default function Auth({ setUser }) {
   return (
     <div className="Auth">
       <div className="container1" id="container1">
-        <SignInForm setUser={setUser} /> {/* ✅ pass down */}
+        <SignInForm setUser={setUser} /> {}
         <div className="overlay-container1">
           <div className="overlay">
             <div className="overlay-panel overlay-right">

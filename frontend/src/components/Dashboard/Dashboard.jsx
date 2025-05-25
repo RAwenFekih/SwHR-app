@@ -3,7 +3,7 @@ import Siderbar from "./Siderbar";
 import Profile from "./Profile";
 import Content from "./Content";
 import RequestsPage from "./RequestsPage";
-import DocumentsPage from "./DocumentsPage";
+import ManageRequest from "./ManageRequest";
 import PerformancePage from "./PerformancePage";
 import HelpPage from "./HelpPage";
 import AddEmployee from "../AddEmployee/AddEmployee";
@@ -32,6 +32,7 @@ const Dashboard = () => {
 
   const storedUser = localStorage.getItem("user");
   const userId = storedUser ? JSON.parse(storedUser).id : null;
+  
 
   useEffect(() => {
     const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
@@ -288,10 +289,10 @@ const Dashboard = () => {
     switch (selectedPage) {
       case "Requests":
         return <RequestsPage />;
-      /*case "Documents":
-        return <DocumentsPage />;
+      case "ManageRequest":
+        return <ManageRequest />;
       case "Performance":
-        return <PerformancePage />;*/
+        return <PerformancePage />;
       case "Help":
         return <HelpPage />;
             case "Add Employee":
@@ -314,7 +315,7 @@ const Dashboard = () => {
         zIndex: "auto",
       }
     : {
-        width: "400px",
+        width: selectedPage === "ManageRequest" ? "370px" : "400px",
         height: "100vh",
         position: "fixed",
         right: "0",
@@ -329,7 +330,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <Siderbar selectedPage={selectedPage} onSelectPage={setSelectedPage} />
+      <Siderbar selectedPage={selectedPage} onSelectPage={setSelectedPage} userRole={userData?.role} />
       <div className="dashboard--content" style={{ display: "flex" }}>
         {selectedPage === "Dashboard" ? (
           <>

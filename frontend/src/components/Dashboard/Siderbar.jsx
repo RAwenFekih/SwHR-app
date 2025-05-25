@@ -11,7 +11,7 @@ import {
 import "./Siderbar.css";
 import logo1 from "../../assets/logo.png";
 
-const Siderbar = ({ selectedPage, onSelectPage }) => {
+const Siderbar = ({ selectedPage, onSelectPage, userRole }) => {
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
@@ -19,48 +19,64 @@ const Siderbar = ({ selectedPage, onSelectPage }) => {
     navigate("/");
   };
 
+  // Sidebar items with visibility based on role
+  const menuItems = [
+    {
+      label: "Dashboard",
+      icon: <BiHome className="icon" />,
+      visible: true,
+    },
+    {
+      label: "Requests",
+      icon: <BiTask className="icon" />,
+      visible: true,
+    },
+    {
+      label: "ManageRequest",
+      icon: <BiSolidReport className="icon" />,
+      visible: userRole === "hr",
+    },
+    {
+      label: "Performance",
+      icon: <BiStats className="icon" />,
+      visible: true,
+      visible: userRole === "hr",
+    },
+    {
+      label: "Help",
+      icon: <BiHelpCircle className="icon" />,
+      visible: true,
+    },
+    {
+      label: "Add Employee",
+      icon: <BiUserPlus className="icon" />,
+      visible: userRole === "admin",
+    },
+  ];
+
   return (
     <div className="menu">
-      <div
-        className="logo1"
-        onClick={handleLogoClick}
-        style={{ cursor: "pointer" }}
-      >
-        <img className="logo1" src={logo1} alt=""></img>
+      <div className="logo1" onClick={handleLogoClick} style={{ cursor: "pointer" }}>
+        <img className="logo1" src={logo1} alt="Logo" />
       </div>
       <div className="menu--list">
-        <div
-          className={`item ${selectedPage === "Dashboard" ? "active" : ""}`}
-          onClick={() => onSelectPage("Dashboard")}
-          style={{ cursor: "pointer" }}
-        >
-          <BiHome className="icon" />
-          Dashboard
-        </div>
-        <div
-          className={`item ${selectedPage === "Requests" ? "active" : ""}`}
-          onClick={() => onSelectPage("Requests")}
-          style={{ cursor: "pointer" }}
-        >
-          <BiTask className="icon" />
-          Add Request
-        </div>
-        <div
-          className={`item ${selectedPage === "Help" ? "active" : ""}`}
-          onClick={() => onSelectPage("Help")}
-          style={{ cursor: "pointer" }}
-        >
-          <BiHelpCircle className="icon" />
-          Help
-        </div>
-        <div
-          className={`item ${selectedPage === "Add Employee" ? "active" : ""}`}
-          onClick={() => onSelectPage("Add Employee")}
-          style={{ cursor: "pointer" }}
-        >
-          <BiUserPlus className="icon" />
-          Add Employee
-        </div>
+        {menuItems
+          .filter((item) => item.visible)
+          .map((item) => (
+            <div
+              key={item.label}
+              className={`item ${selectedPage === item.label ? "active" : ""}`}
+              onClick={() => onSelectPage(item.label)}
+              style={{ cursor: "pointer" }}
+            >
+              {item.icon}
+              {item.label === "ManageRequest" ? "Manage Requests" :
+               item.label === "Add Employee" ? "Add Employee" :
+               item.label === "Performance" ? "Review Performances" :
+               item.label === "Requests" ? "Add Request" :
+               item.label}
+            </div>
+          ))}
       </div>
     </div>
   );
