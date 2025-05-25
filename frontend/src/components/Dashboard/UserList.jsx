@@ -11,7 +11,8 @@ const translations = {
     employees: "Manage Employees",
     users: "Users",
     requestType: "Request Type",
-    datesOfRequest: "Dates of Request",
+    startDate: "Starting",
+    endDate: "Ending",
     totalDays: "Total Days",
     status: "Status",
     todo: "To Do",
@@ -23,7 +24,8 @@ const translations = {
     employees: "Gérer les Employés",
     users: "Utilisateurs",
     requestType: "Type de Demande",
-    datesOfRequest: "Dates de la Demande",
+    startDate: "Debut",
+    endDate: "Fin",
     totalDays: "Nombre de Jours",
     status: "Statut",
     todo: "À Faire",
@@ -35,7 +37,8 @@ const translations = {
     employees: "إدارة الموظفين",
     users: "المستخدمون",
     requestType: "نوع الطلب",
-    datesOfRequest: "تواريخ الطلب",
+    startDate: "  بداىةالطلب",
+    endDate: "نهاىةالطلب",
     totalDays: "إجمالي الأيام",
     status: "الحالة",
     todo: "المهام",
@@ -109,7 +112,8 @@ console.log("data2", data);
           <thead>
             <tr>
               <th>{t.requestType}</th>
-              <th>{t.datesOfRequest}</th>
+              <th>{t.startDate}</th>
+              <th>{t.endDate}</th>
               <th>{t.totalDays}</th>
               <th>{t.status}</th>
             </tr>
@@ -117,9 +121,10 @@ console.log("data2", data);
           <tbody>
             {data.map((item) => (
               <tr key={item.id}>
-                <td>{translateText(item.title)}</td>
-                <td>{item.date}</td>
-                <td>{item.days !== undefined ? item.days : "-"}</td>
+                <td>{translateText(item.leave_type)}</td>
+                <td>{item.start_date}</td>
+                <td>{item.end_date}</td>
+                <td>{item.days_requested !== undefined ? item.days_requested : "-"}</td>
                 <td>{item.status || "-"}</td>
               </tr>
             ))}

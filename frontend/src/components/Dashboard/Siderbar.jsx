@@ -43,17 +43,8 @@ const Siderbar = ({ selectedPage, onSelectPage }) => {
           style={{ cursor: "pointer" }}
         >
           <BiTask className="icon" />
-          Requests
+          Add Request
         </div>
-        <div
-          className={`item ${selectedPage === "Documents" ? "active" : ""}`}
-          onClick={() => onSelectPage("Documents")}
-          style={{ cursor: "pointer" }}
-        >
-          <BiSolidReport className="icon" />
-          Documents
-        </div>
-        
         <div
           className={`item ${selectedPage === "Help" ? "active" : ""}`}
           onClick={() => onSelectPage("Help")}
@@ -68,7 +59,7 @@ const Siderbar = ({ selectedPage, onSelectPage }) => {
           style={{ cursor: "pointer" }}
         >
           <BiUserPlus className="icon" />
-          Add HR User
+          Add Employee
         </div>
       </div>
     </div>

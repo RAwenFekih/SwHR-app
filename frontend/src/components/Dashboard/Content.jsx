@@ -26,7 +26,7 @@ const documents = [
   },
 ];
 
-const requests = [
+/*const requests = [
   {
     id: 1,
     title: "Leave Request",
@@ -50,13 +50,6 @@ const requests = [
     days: 3,
     status: "Pending",
   },
-];
-
-/*const performances = [
-  { id: 1, date: "2023-12", score: 50 },
-  { id: 2, date: "2024-01", score: 65 },
-  { id: 3, date: "2024-04", score: 80 },
-  { id: 4, date: "2024-08", score: 85 },
 ];*/
 
 const employees = [
@@ -79,6 +72,7 @@ const employees = [
 const Content = ({userId}) => {
   const [selectedCard, setSelectedCard] = useState("My Documents");
   const [performances, setPerformanceData] = useState([]);
+  const [requests, setRequestsData] = useState([]);
 
 
   // Simulate user role: "employee" or "hr"
@@ -100,6 +94,26 @@ const Content = ({userId}) => {
           ...prev,
           {
             content: `❌ Error fetching performance. Please try again later.`,
+          },
+        ]);
+      });
+  }, [userId]);
+
+  useEffect(() => {
+    fetch(`http://localhost:8081/api/requests/user/${userId}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch");
+        }
+        return res.json();
+      })
+      .then((data) => setRequestsData(data))
+      .catch((err) => {
+        console.error("Error fetching requests:", err);
+        setMessages((prev) => [
+          ...prev,
+          {
+            content: `❌ Error fetching requests. Please try again later.`,
           },
         ]);
       });

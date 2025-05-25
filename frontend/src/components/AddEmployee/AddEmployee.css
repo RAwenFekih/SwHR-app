@@ -1,9 +1,9 @@
 .add-hr-container {
   max-width: 420px;
-  margin: 40px auto;
+  margin: auto;
   background: #fff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 30px 40px;
+  padding: 20px 40px;
   border-radius: 12px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
@@ -15,7 +15,6 @@
 
 .add-hr-container h2 {
   text-align: center;
-  margin-bottom: 25px;
   font-weight: 700;
   color: #174b6e;
   letter-spacing: 1.2px;
@@ -34,9 +33,11 @@
 
 .form-group input[type="text"],
 .form-group input[type="email"],
-.form-group input[type="password"] {
+.form-group input[type="passHash"],
+.form-group input[type="age"],
+.form-group input[type="nationality"] {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 13px;
   font-size: 16px;
   border: 2px solid #bdc3c7;
   border-radius: 8px;
@@ -47,7 +48,9 @@
 
 .form-group input[type="text"]:focus,
 .form-group input[type="email"]:focus,
-.form-group input[type="password"]:focus {
+.form-group input[type="passHash"]:focus,
+.form-group input[type="age"]:focus,
+.form-group input[type="nationality"]:focus{
   border-color: #2980b9;
   box-shadow: 0 0 8px rgba(41, 128, 185, 0.3);
 }

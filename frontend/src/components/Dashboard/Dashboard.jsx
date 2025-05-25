@@ -288,12 +288,14 @@ const Dashboard = () => {
     switch (selectedPage) {
       case "Requests":
         return <RequestsPage />;
-      case "Documents":
+      /*case "Documents":
         return <DocumentsPage />;
-      /*case "Performance":
+      case "Performance":
         return <PerformancePage />;*/
       case "Help":
         return <HelpPage />;
+            case "Add Employee":
+        return <AddEmployee />;
       case "Dashboard":
       default:
         return <Content userId={userId} />;
