@@ -53,14 +53,7 @@ const Siderbar = ({ selectedPage, onSelectPage }) => {
           <BiSolidReport className="icon" />
           Documents
         </div>
-        <div
-          className={`item ${selectedPage === "Performance" ? "active" : ""}`}
-          onClick={() => onSelectPage("Performance")}
-          style={{ cursor: "pointer" }}
-        >
-          <BiStats className="icon" />
-          Performance
-        </div>
+        
         <div
           className={`item ${selectedPage === "Help" ? "active" : ""}`}
           onClick={() => onSelectPage("Help")}

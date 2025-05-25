@@ -64,6 +64,7 @@ const UserList = ({ data, selectedCard }) => {
   if (!selectedCard || data.length === 0) {
     return null; // Render nothing if no card selected or no data
   }
+console.log("data2", data);
 
   const t = translations[language];
 

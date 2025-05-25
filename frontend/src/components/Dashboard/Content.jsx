@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ContentHeader from "./ContentHeader";
 import "./Content.css";
 import Card from "./Card";
@@ -52,14 +52,12 @@ const requests = [
   },
 ];
 
-const performances = [
-  { id: 1, date: "2025-01", score: 75 },
-  { id: 2, date: "2025-02", score: 80 },
-  { id: 3, date: "2025-03", score: 85 },
-  { id: 4, date: "2024-04", score: 90 },
-  { id: 5, date: "2024-05", score: 88 },
-  { id: 6, date: "2024-06", score: 92 },
-];
+/*const performances = [
+  { id: 1, date: "2023-12", score: 50 },
+  { id: 2, date: "2024-01", score: 65 },
+  { id: 3, date: "2024-04", score: 80 },
+  { id: 4, date: "2024-08", score: 85 },
+];*/
 
 const employees = [
   {
@@ -78,16 +76,39 @@ const employees = [
   },
 ];
 
-const Content = () => {
+const Content = ({userId}) => {
   const [selectedCard, setSelectedCard] = useState("My Documents");
+  const [performances, setPerformanceData] = useState([]);
+
 
   // Simulate user role: "employee" or "hr"
   const [userRole] = React.useState("employee");
+  const [messages, setMessages] = useState([]); // Ensure messages state exists
+
+  useEffect(() => {
+    fetch(`http://localhost:8081/api/performance/user/${userId}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch");
+        }
+        return res.json();
+      })
+      .then((data) => setPerformanceData(data))
+      .catch((err) => {
+        console.error("Error fetching performance:", err);
+        setMessages((prev) => [
+          ...prev,
+          {
+            content: `❌ Error fetching performance. Please try again later.`,
+          },
+        ]);
+      });
+  }, [userId]);
 
   const handleCardClick = (title) => {
     setSelectedCard(title);
   };
-
+ console.log("perf:", performances);
   let listData = [];
   switch (selectedCard) {
     case "My Documents":
@@ -98,6 +119,7 @@ const Content = () => {
       break;
     case "My Performance":
       listData = performances;
+      console.log("listData:", listData);
       break;
     case "Manage Employees":
       listData = employees;

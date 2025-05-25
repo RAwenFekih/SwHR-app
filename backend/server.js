@@ -6,8 +6,9 @@ const chatRoutes = require('./routes/chat');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 //const passwordResetHandler = require("./passwordReset");
-const db = require("./db");
 const requestRoutes = require("./routes/requests");
+const perfRoutes = require("./routes/performance");
+
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use('/api/users', userRoutes);
 app.use("/api/requests", requestRoutes); 
+app.use("/api/performance", perfRoutes); 
 
 
 app.use((req, res) => {

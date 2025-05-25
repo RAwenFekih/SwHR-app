@@ -103,7 +103,7 @@ const Dashboard = () => {
             const formatted = data
               .map(
                 (req) =>
-                  `🔹 Type: ${req.leave_type.replace(/_/g, " ")}\n📅 ${req.start_date} → ${req.end_date} (${req.days_requested} days)\n📌 Status: ${req.status}`
+                  `📌🔹 Type: ${req.leave_type.replace(/_/g, " ")} \n 📅 ${req.start_date} → ${req.end_date} (${req.days_requested} days)\n Status: ${req.status}\n\n`
               )
               .join("\n\n");
 
@@ -290,13 +290,13 @@ const Dashboard = () => {
         return <RequestsPage />;
       case "Documents":
         return <DocumentsPage />;
-      case "Performance":
-        return <PerformancePage />;
+      /*case "Performance":
+        return <PerformancePage />;*/
       case "Help":
         return <HelpPage />;
       case "Dashboard":
       default:
-        return <Content />;
+        return <Content userId={userId} />;
     }
   };
 
