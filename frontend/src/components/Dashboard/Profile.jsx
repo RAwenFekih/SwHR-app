@@ -1,13 +1,13 @@
 import ProfileHeader from "./ProfileHeader";
 import "./Profile.css";
-import userImage from "../../assets/user.webp";
+import userImage from "../../assets/user.png";
 import { PiGenderIntersexBold } from "react-icons/pi";
 import { GrUserManager } from "react-icons/gr";
 import { BiSolidPlanet } from "react-icons/bi";
 
 const informations = [
   {
-    Sex: "Male",
+    Sex: "Female",
     icon: <PiGenderIntersexBold />,
   },
   {
@@ -15,7 +15,7 @@ const informations = [
     icon: <BiSolidPlanet />,
   },
   {
-    Age: "30 years old",
+    Age: "22 years old",
     icon: <GrUserManager />,
   },
 ];
@@ -28,7 +28,7 @@ const Profile = () => {
       <div className="user--profile">
         <div className="user--details">
           <img src={userImage} alt="" />
-          <h3 className="username">Joe Doe</h3>
+          <h3 className="username">Rawen Fekih</h3>
           <span className="profession">Employee</span>
         </div>
         <div className="user-informations">

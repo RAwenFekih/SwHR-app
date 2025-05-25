@@ -2,6 +2,7 @@ import React from "react";
 import "./Footer.css";
 import logo from "../../assets/logo.png";
 import { Link } from "react-scroll";
+import { Link as RouterLink } from "react-router-dom";
 
 const Footer = () => {
   return (

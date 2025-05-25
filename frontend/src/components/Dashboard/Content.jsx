@@ -29,15 +29,28 @@ const documents = [
 const requests = [
   {
     id: 1,
-    title: "Leave Request",
-    date: "2024-07-01",
-    description: "Request for annual leave",
+    title: "Vacation",
+    date: "01-06-2025 / 15-06-2025",
+    description: "Request for vaction",
+    days: 15,
+    status: "Approved",
   },
+
   {
     id: 2,
-    title: "Equipment Request",
-    date: "2024-07-05",
-    description: "Request for new laptop",
+    title: "Wedding",
+    date: "28-05-2025 / 15-06-2025",
+    description: "Request for wedding",
+    days: 19,
+    status: "Rejected",
+  },
+  {
+    id: 3,
+    title: "Child Born",
+    date: "05-08-2025 / 08-08-2025",
+    description: "Request for child born",
+    days: 3,
+    status: "Pending",
   },
 ];
 

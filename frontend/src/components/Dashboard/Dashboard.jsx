@@ -6,6 +6,7 @@ import RequestsPage from "./RequestsPage";
 import DocumentsPage from "./DocumentsPage";
 import PerformancePage from "./PerformancePage";
 import HelpPage from "./HelpPage";
+import AddEmployee from "../AddEmployee/AddEmployee";
 import chatbotIcon from "../../assets/chatbot1.png";
 import "./Dashboard.css";
 
@@ -32,6 +33,8 @@ const Dashboard = () => {
         return <PerformancePage />;
       case "Help":
         return <HelpPage />;
+      case "Add Employee":
+        return <AddEmployee />;
       case "Dashboard":
       default:
         return <Content />;
@@ -41,7 +44,7 @@ const Dashboard = () => {
   const profileContainerStyle = isSmallScreen
     ? {
         width: "100%",
-        height: "auto",
+        height: "500px",
         position: "static",
         boxShadow: "none",
         borderRadius: 0,

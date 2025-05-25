@@ -45,6 +45,36 @@
   cursor: pointer;
 }
 
+.user--list {
+  margin-top: 20px;
+}
+
+.requests-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+.requests-table thead {
+  background-color: #007bff;
+  color: white;
+}
+
+.requests-table th,
+.requests-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.requests-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.requests-table tbody tr:hover {
+  background-color: #e6f0ff;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .list--header {
