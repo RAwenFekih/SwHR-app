@@ -29,7 +29,7 @@ const Siderbar = ({ selectedPage, onSelectPage, userRole }) => {
     {
       label: "Requests",
       icon: <BiTask className="icon" />,
-      visible: true,
+      visible: userRole !== "admin",
     },
     {
       label: "ManageRequest",
@@ -43,15 +43,16 @@ const Siderbar = ({ selectedPage, onSelectPage, userRole }) => {
       visible: userRole === "hr",
     },
     {
-      label: "Help",
-      icon: <BiHelpCircle className="icon" />,
-      visible: true,
-    },
-    {
       label: "Add Employee",
       icon: <BiUserPlus className="icon" />,
       visible: userRole === "admin",
     },
+    {
+      label: "Help",
+      icon: <BiHelpCircle className="icon" />,
+      visible: true,
+    },
+    
   ];
 
   return (

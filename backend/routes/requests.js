@@ -221,4 +221,69 @@ router.get('/user/:userId', async (req, res) => {
   }
 });
 
+
+router.get('/all', async (req, res) => {
+  try {
+    const rows = await new Promise((resolve, reject) => {
+      const query = `
+        SELECT lr.*, u.name 
+        FROM leaverequests lr
+        JOIN users u ON lr.user_id = u.user_id
+      `;
+
+      db.query(query, (err, result) => {
+        if (err) {
+          return reject(err);
+        }
+
+        if (!result || result.length === 0) {
+          return reject(new Error("No requests found in the database"));
+        }
+
+        resolve(result);
+      });
+    });
+
+    res.json(rows);
+  } catch (err) {
+    console.error("DB error:", err.message);
+    res.status(500).json({ error: err.message || "Failed to fetch requests" });
+  }
+});
+
+router.put('/update-status', async (req, res) => {
+  const { status, request_id } = req.body;
+    console.log(req.body)
+    console.log(req.body)
+    console.log(req.body)
+  if (!request_id || !status) {
+    return res.status(400).json({ error: "Missing requestId or status" });
+  }
+  const validStatus = ['pending', 'approved', 'rejected'];
+        if (!validStatus.includes(status)) {
+            return res.status(400).json({
+                error: 'Invalid status',
+                valid_types: validStatus,
+                received: status
+            });
+        }
+
+  try {
+    await new Promise((resolve, reject) => {
+      const query = 'UPDATE leaverequests SET status = ? WHERE request_id = ?';
+      db.query(query, [status, request_id], (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+
+    res.json({ message: "Status updated successfully" });
+  } catch (err) {
+    console.error("Update error:", err.message);
+    res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
+
+
 module.exports = router;
