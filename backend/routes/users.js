@@ -132,5 +132,32 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/all/all', async (req, res) => {
+  try {
+    const rows = await new Promise((resolve, reject) => {
+      const query = `
+        SELECT * 
+        FROM users
+      `;
+
+      db.query(query, (err, result) => {
+        if (err) {
+          return reject(err);
+        }
+
+        if (!result || result.length === 0) {
+          return reject(new Error("No users found in the database"));
+        }
+
+        resolve(result);
+      });
+    });
+
+    res.json(rows);
+  } catch (err) {
+    console.error("DB error:", err.message);
+    res.status(500).json({ error: err.message || "Failed to fetch users" });
+  }
+});
 
 module.exports = router;

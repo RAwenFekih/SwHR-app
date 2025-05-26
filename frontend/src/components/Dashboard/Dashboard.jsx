@@ -295,11 +295,11 @@ const Dashboard = () => {
         return <ManageRequest />;
       case "Performance":
         return <PerformancePage />;
-      case "Add Document":
+      case "AddDocument":
         return <AddDocument />;  
       case "Add Employee":
         return <AddEmployee />;
-      case "Manage Employees":
+      case "ManageEmployees":
         return <ManageEmployees/>;
       case "Help":
         return <HelpPage />;  

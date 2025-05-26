@@ -38,12 +38,28 @@ const AddDocument = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccessMessage("");
-    if (validate()) {
-      setSuccessMessage(`Document "${formData.doc_name}" added successfully.`);
-      setFormData({
+        if (validate()) {
+      try {
+        const response = await fetch("http://localhost:8081/api/docs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.message || "Failed to add documents");
+        }
+
+        setSuccessMessage(
+          `Employee "${formData.name}" added. Email: ${formData.email}`
+        );
+        setFormData({
         doc_id: "",
         user_id: "",
         doc_name: "",
@@ -51,7 +67,10 @@ const AddDocument = () => {
         file_path: "",
         upload_date: "",
       });
-      setErrors({});
+        setErrors({});
+      } catch (error) {
+        setServerError(error.message);
+      }
     }
   };
 
