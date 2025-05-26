@@ -45,22 +45,7 @@ const Siderbar = ({ selectedPage, onSelectPage }) => {
           <BiTask className="icon" />
           Requests
         </div>
-        <div
-          className={`item ${selectedPage === "Documents" ? "active" : ""}`}
-          onClick={() => onSelectPage("Documents")}
-          style={{ cursor: "pointer" }}
-        >
-          <BiSolidReport className="icon" />
-          Documents
-        </div>
-        <div
-          className={`item ${selectedPage === "Performance" ? "active" : ""}`}
-          onClick={() => onSelectPage("Performance")}
-          style={{ cursor: "pointer" }}
-        >
-          <BiStats className="icon" />
-          Performance
-        </div>
+
         <div
           className={`item ${selectedPage === "Help" ? "active" : ""}`}
           onClick={() => onSelectPage("Help")}
@@ -70,12 +55,28 @@ const Siderbar = ({ selectedPage, onSelectPage }) => {
           Help
         </div>
         <div
+          className={`item ${selectedPage === "ManageRequest" ? "active" : ""}`}
+          onClick={() => onSelectPage("ManageRequest")}
+          style={{ cursor: "pointer" }}
+        >
+          <BiSolidReport className="icon" />
+          Manage Requests
+        </div>
+        <div
+          className={`item ${selectedPage === "Performance" ? "active" : ""}`}
+          onClick={() => onSelectPage("Performance")}
+          style={{ cursor: "pointer" }}
+        >
+          <BiStats className="icon" />
+          Review Performances
+        </div>
+        <div
           className={`item ${selectedPage === "Add Employee" ? "active" : ""}`}
           onClick={() => onSelectPage("Add Employee")}
           style={{ cursor: "pointer" }}
         >
           <BiUserPlus className="icon" />
-          Add HR User
+          Add Employee
         </div>
       </div>
     </div>

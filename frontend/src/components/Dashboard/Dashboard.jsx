@@ -3,7 +3,7 @@ import Siderbar from "./Siderbar";
 import Profile from "./Profile";
 import Content from "./Content";
 import RequestsPage from "./RequestsPage";
-import DocumentsPage from "./DocumentsPage";
+import ManageRequest from "./ManageRequest";
 import PerformancePage from "./PerformancePage";
 import HelpPage from "./HelpPage";
 import AddEmployee from "../AddEmployee/AddEmployee";
@@ -27,8 +27,8 @@ const Dashboard = () => {
     switch (selectedPage) {
       case "Requests":
         return <RequestsPage />;
-      case "Documents":
-        return <DocumentsPage />;
+      case "ManageRequest":
+        return <ManageRequest />;
       case "Performance":
         return <PerformancePage />;
       case "Help":
@@ -53,7 +53,7 @@ const Dashboard = () => {
         zIndex: "auto",
       }
     : {
-        width: "400px",
+        width: selectedPage === "ManageRequest" ? "320px" : "400px",
         height: "100vh",
         position: "fixed",
         right: "0",
@@ -74,6 +74,18 @@ const Dashboard = () => {
           <>
             {renderPage()}
             <Profile />
+          </>
+        ) : selectedPage === "ManageRequest" ? (
+          <>
+            <div
+              style={{
+                marginRight: isSmallScreen ? "0" : "0",
+                flexGrow: 1,
+                width: "100%",
+              }}
+            >
+              {renderPage()}
+            </div>
           </>
         ) : (
           <>

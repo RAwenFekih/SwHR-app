@@ -3,26 +3,25 @@ import ContentHeader from "./ContentHeader";
 import "./Content.css";
 import Card from "./Card";
 import UserList from "./UserList";
-import userImage from "../../assets/user.webp";
 
 const documents = [
   {
     id: 1,
     title: "Employee Contract",
     date: "2024-01-15",
-    description: "Contract document for Joe Doe",
+    description: "Contract document for Rawen Fekih",
   },
   {
     id: 2,
     title: "Performance Review",
     date: "2024-06-10",
-    description: "Mid-year performance review for Joe Doe",
+    description: "Mid-year performance review for Rawen Fekih",
   },
   {
     id: 3,
     title: "Training Certificate",
     date: "2024-03-22",
-    description: "Completed React training by Joe Doe",
+    description: "Completed React training by Rawen Fekih",
   },
 ];
 
@@ -63,28 +62,8 @@ const performances = [
   { id: 6, date: "2024-06", score: 92 },
 ];
 
-const employees = [
-  {
-    id: 1,
-    image: userImage,
-    name: "Employee A",
-    duration: "Full-time",
-    cost: "120",
-  },
-  {
-    id: 2,
-    image: userImage,
-    name: "Employee B",
-    duration: "Part-time",
-    cost: "80",
-  },
-];
-
 const Content = () => {
   const [selectedCard, setSelectedCard] = useState("My Documents");
-
-  // Simulate user role: "employee" or "hr"
-  const [userRole] = React.useState("employee");
 
   const handleCardClick = (title) => {
     setSelectedCard(title);
@@ -101,21 +80,12 @@ const Content = () => {
     case "My Performance":
       listData = performances;
       break;
-    case "Manage Employees":
-      listData = employees;
-      break;
-    default:
-      listData = [];
   }
 
   return (
     <div className="content">
       <ContentHeader />
-      <Card
-        selectedCard={selectedCard}
-        onCardClick={handleCardClick}
-        userRole={userRole}
-      />
+      <Card selectedCard={selectedCard} onCardClick={handleCardClick} />
       <UserList data={listData} selectedCard={selectedCard} />
     </div>
   );

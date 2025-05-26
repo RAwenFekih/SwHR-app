@@ -44,7 +44,7 @@ const AddEmployee = () => {
 
   return (
     <div className="add-hr-container">
-      <h2>Add HR User</h2>
+      <h2>Add Employee</h2>
       <form onSubmit={handleSubmit} noValidate>
         <div className="form-group">
           <label htmlFor="name">Full Name</label>
@@ -86,7 +86,7 @@ const AddEmployee = () => {
         </div>
 
         <button type="submit" className="btn-submit">
-          Add HR User
+          Add Employee
         </button>
       </form>
       {successMessage && (
