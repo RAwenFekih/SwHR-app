@@ -57,10 +57,12 @@
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.4);
 }
 
 .button_1:hover {
   background-color: #2471a3;
+  box-shadow: 0 6px 18px rgba(31, 95, 139, 0.6);
 }
 
 .error_1 {

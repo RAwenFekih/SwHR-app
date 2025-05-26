@@ -1,0 +1,73 @@
+.performance-form {
+  max-width: 500px;
+  margin: 0 auto;
+  background: #f9f9f9;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.performance-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #174b6e;
+}
+
+.performance-form .form-group {
+  margin-bottom: 15px;
+}
+
+.performance-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #555;
+}
+
+.performance-form input[type="text"],
+.performance-form input[type="number"],
+.performance-form input[type="date"],
+.performance-form select,
+.performance-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.performance-form input[type="text"]:focus,
+.performance-form input[type="number"]:focus,
+.performance-form input[type="date"]:focus,
+.performance-form select:focus,
+.performance-form textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.performance-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.performance-form button {
+  width: 100%;
+  background: #2980b9;
+  color: white;
+  font-weight: 700;
+  font-size: 17px;
+  padding: 12px 0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.4);
+}
+
+.performance-form button:hover {
+  background: #1f5f8b;
+  box-shadow: 0 6px 18px rgba(31, 95, 139, 0.6);
+}

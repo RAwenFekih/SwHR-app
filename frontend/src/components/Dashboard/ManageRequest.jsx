@@ -31,6 +31,7 @@ const ManageRequest = () => {
 
   return (
     <div className="manage-request-container">
+      <h1 className="manage-request-h1">Manage requests</h1>
       <table className="manage-request-table">
         <thead>
           <tr>

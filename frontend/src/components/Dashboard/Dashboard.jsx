@@ -5,6 +5,7 @@ import Content from "./Content";
 import RequestsPage from "./RequestsPage";
 import ManageRequest from "./ManageRequest";
 import PerformancePage from "./PerformancePage";
+import AddDocument from "./AddDocument";
 import HelpPage from "./HelpPage";
 import AddEmployee from "../AddEmployee/AddEmployee";
 import chatbotIcon from "../../assets/chatbot1.png";
@@ -35,6 +36,8 @@ const Dashboard = () => {
         return <HelpPage />;
       case "Add Employee":
         return <AddEmployee />;
+      case "Add Document":
+        return <AddDocument />;
       case "Dashboard":
       default:
         return <Content />;
@@ -76,6 +79,18 @@ const Dashboard = () => {
             <Profile />
           </>
         ) : selectedPage === "ManageRequest" ? (
+          <>
+            <div
+              style={{
+                marginRight: isSmallScreen ? "0" : "0",
+                flexGrow: 1,
+                width: "100%",
+              }}
+            >
+              {renderPage()}
+            </div>
+          </>
+        ) : selectedPage === "Help" ? (
           <>
             <div
               style={{

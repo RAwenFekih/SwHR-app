@@ -7,6 +7,7 @@ import {
   BiTask,
   BiHelpCircle,
   BiUserPlus,
+  BiFileBlank,
 } from "react-icons/bi";
 import "./Siderbar.css";
 import logo1 from "../../assets/logo.png";
@@ -77,6 +78,14 @@ const Siderbar = ({ selectedPage, onSelectPage }) => {
         >
           <BiUserPlus className="icon" />
           Add Employee
+        </div>
+        <div
+          className={`item ${selectedPage === "Add Document" ? "active" : ""}`}
+          onClick={() => onSelectPage("Add Document")}
+          style={{ cursor: "pointer" }}
+        >
+          <BiFileBlank className="icon" />
+          Add Document
         </div>
       </div>
     </div>
