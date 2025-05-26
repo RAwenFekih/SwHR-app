@@ -4,6 +4,8 @@ import Profile from "./Profile";
 import Content from "./Content";
 import RequestsPage from "./RequestsPage";
 import ManageRequest from "./ManageRequest";
+import ManageEmployees from "./ManageEmployees";
+import AddDocument from "./AddDocument";
 import PerformancePage from "./PerformancePage";
 import HelpPage from "./HelpPage";
 import AddEmployee from "../AddEmployee/AddEmployee";
@@ -293,10 +295,14 @@ const Dashboard = () => {
         return <ManageRequest />;
       case "Performance":
         return <PerformancePage />;
-      case "Help":
-        return <HelpPage />;
-            case "Add Employee":
+      case "Add Document":
+        return <AddDocument />;  
+      case "Add Employee":
         return <AddEmployee />;
+      case "Manage Employees":
+        return <ManageEmployees/>;
+      case "Help":
+        return <HelpPage />;  
       case "Dashboard":
       default:
         return <Content userId={userId} />;

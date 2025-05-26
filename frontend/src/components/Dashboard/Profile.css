@@ -8,24 +8,6 @@
   align-items: center;
   justify-content: space-between;
 }
-.edit {
-  background: #007bff;
-  padding: 12px;
-  border-radius: 10px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.edit .icon {
-  font-size: 20px;
-  transition: 0.5s ease-in-out;
-}
-.icon:hover {
-  transform: scale(1.3);
-  cursor: pointer;
-}
-
 .user--profile {
   height: 225px;
   width: 300px;
@@ -110,4 +92,24 @@
 .profession {
   color: #007bff;
   font-family: "Outfit", sans-serif;
+}
+
+.logout-button {
+  background: #007bff;
+  padding: 12px;
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-button .icon {
+  font-size: 20px;
+  transition: 0.5s ease-in-out;
+}
+
+.logout-button .icon:hover {
+  transform: scale(1.3);
+  cursor: pointer;
 }

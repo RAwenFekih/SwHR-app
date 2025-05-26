@@ -7,6 +7,8 @@ import {
   BiTask,
   BiHelpCircle,
   BiUserPlus,
+  BiFileBlank,
+  BiGroup,
 } from "react-icons/bi";
 import "./Siderbar.css";
 import logo1 from "../../assets/logo.png";
@@ -47,6 +49,16 @@ const Siderbar = ({ selectedPage, onSelectPage, userRole }) => {
       icon: <BiUserPlus className="icon" />,
       visible: userRole === "admin",
     },
+     {
+      label: "ManageEmployees",
+      icon: <BiGroup className="icon" />,
+      visible: userRole === "admin" || userRole === "hr",
+    },
+    {
+      label: "AddDocument",
+      icon: <BiFileBlank className="icon" />,
+      visible: userRole === "hr",
+    },
     {
       label: "Help",
       icon: <BiHelpCircle className="icon" />,
@@ -75,6 +87,8 @@ const Siderbar = ({ selectedPage, onSelectPage, userRole }) => {
                item.label === "Add Employee" ? "Add Employee" :
                item.label === "Performance" ? "Review Performances" :
                item.label === "Requests" ? "Add Request" :
+               item.label === "ManageEmployees" ? "Manage Employees" :
+               item.label === "AddDocument" ? "Add Document" :
                item.label}
             </div>
           ))}
