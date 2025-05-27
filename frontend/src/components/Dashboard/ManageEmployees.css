@@ -1,0 +1,91 @@
+.manage-employees-h1 {
+  color: #174b6e;
+  font-weight: 700;
+  font-size: 2rem;
+  font-family: "Outfit", sans-serif;
+  padding: 15px 15px;
+}
+.manage-employees-container {
+  padding: 20px;
+  background-color: white;
+  height: 100%;
+}
+
+.manage-employees-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+.manage-employees-table th,
+.manage-employees-table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.manage-employees-table thead {
+  background-color: #0078d7;
+  color: white;
+  font-weight: bold;
+}
+
+.manage-employees-table tbody tr.alt-row {
+  background-color: #f2f8ff;
+}
+
+.remove-btn {
+  padding: 8px 18px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  min-width: 80px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.remove-btn {
+  background-color: #dc3545;
+}
+
+.remove-btn:hover {
+  background-color: #c82333;
+}
+
+.button-group-1 {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-btn {
+  padding: 8px 18px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  min-width: 80px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: inline-block;
+  line-height: 1.4;
+}
+.add-btn {
+  background-color: #28a745;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}
