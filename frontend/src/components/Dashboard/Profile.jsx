@@ -1,7 +1,7 @@
 import React from "react";
 import ProfileHeader from "./ProfileHeader";
 import "./Profile.css";
-import userImage from "../../assets/user.png";
+import userImage from "../../assets/user_unknwn.jpeg";
 import { PiGenderIntersexBold } from "react-icons/pi";
 import { GrUserManager } from "react-icons/gr";
 import { BiSolidPlanet } from "react-icons/bi";

@@ -49,6 +49,8 @@ const ManageEmployees = () => {
               <td>
                 <div className="button-group-1">
                   <button className="remove-btn">Remove</button>
+                  <button className="add-btn">Edit</button>
+
                 </div>
               </td>
             </tr>
