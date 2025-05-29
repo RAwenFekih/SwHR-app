@@ -9,6 +9,7 @@ import {
   BiUserPlus,
   BiFileBlank,
   BiGroup,
+  BiGrid,
 } from "react-icons/bi";
 import "./Siderbar.css";
 import logo1 from "../../assets/logo.png";
@@ -97,6 +98,14 @@ const Siderbar = ({ selectedPage, onSelectPage }) => {
         >
           <BiGroup className="icon" />
           Manage Employees
+        </div>
+        <div
+          className={`item ${selectedPage === "DashboardHR" ? "active" : ""}`}
+          onClick={() => onSelectPage("DashboardHR")}
+          style={{ cursor: "pointer" }}
+        >
+          <BiGrid className="icon" />
+          Dashboard HR
         </div>
       </div>
     </div>
