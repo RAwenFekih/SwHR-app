@@ -7,6 +7,7 @@ import ManageRequest from "./ManageRequest";
 import ManageEmployees from "./ManageEmployees";
 import AddDocument from "./AddDocument";
 import PerformancePage from "./PerformancePage";
+import DashboardHR from "../DashboardHR/DashboardHR";
 import HelpPage from "./HelpPage";
 import AddEmployee from "../AddEmployee/AddEmployee";
 import chatbotIcon from "../../assets/chatbot1.png";
@@ -31,10 +32,11 @@ const Dashboard = () => {
   const [chatState, setChatState] = useState(null);
   const [requestData, setRequestData] = useState({});
   const [userInput, setUserInput] = useState("");
+  const [awaitingCustomQuestion, setAwaitingCustomQuestion] = useState(false);
+
 
   const storedUser = localStorage.getItem("user");
   const userId = storedUser ? JSON.parse(storedUser).id : null;
-  
 
   useEffect(() => {
     const handleResize = () => setIsSmallScreen(window.innerWidth <= 768);
@@ -100,19 +102,29 @@ const Dashboard = () => {
           if (!data.length) {
             setMessages((prev) => [
               ...prev,
-              { role: "assistant", content: "📭 You have no leave requests yet." },
+              {
+                role: "assistant",
+                content: "📭 You have no leave requests yet.",
+              },
             ]);
           } else {
             const formatted = data
               .map(
                 (req) =>
-                  `📌🔹 Type: ${req.leave_type.replace(/_/g, " ")} \n 📅 ${req.start_date} → ${req.end_date} (${req.days_requested} days)\n Status: ${req.status}\n\n`
+                  `📌🔹 Type: ${req.leave_type.replace(/_/g, " ")} \n 📅 ${
+                    req.start_date
+                  } → ${req.end_date} (${req.days_requested} days)\n Status: ${
+                    req.status
+                  }\n\n`
               )
               .join("\n\n");
 
             setMessages((prev) => [
               ...prev,
-              { role: "assistant", content: `📋 Your Leave Requests:\n\n${formatted}` },
+              {
+                role: "assistant",
+                content: `📋 Your Leave Requests:\n\n${formatted}`,
+              },
             ]);
           }
         })
@@ -126,14 +138,25 @@ const Dashboard = () => {
             },
           ]);
         });
-    } else {
+    } else if (option.includes("Other questions")) {
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "I'm not sure how to help with that yet.",
+          content: "Sure! Please type your question below.",
         },
       ]);
+      setAwaitingCustomQuestion(true); // You’ll use this to show the input box
+    } else {
+      // Handle regular options
+      fetch(`http://localhost:8081/api/chat`)
+        .then((res) => res.json())
+        .then((data) => {
+          setMessages((prev) => [
+            ...prev,
+            { role: "assistant", content: data.response }, // <-- Add response here
+          ]);
+        });
     }
   };
 
@@ -156,7 +179,9 @@ const Dashboard = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Server error: ${response.status}`);
+        throw new Error(
+          errorData.message || `Server error: ${response.status}`
+        );
       }
 
       return await response.json();
@@ -176,7 +201,8 @@ const Dashboard = () => {
     setUserInput("");
 
     try {
-      if (!userId) throw new Error("You must be logged in to submit a leave request");
+      if (!userId)
+        throw new Error("You must be logged in to submit a leave request");
 
       if (chatState === "leave_type") {
         const leaveTypeMap = {
@@ -203,7 +229,10 @@ const Dashboard = () => {
         setChatState("start_date");
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: "📅 When should the leave start? (YYYY-MM-DD)" },
+          {
+            role: "assistant",
+            content: "📅 When should the leave start? (YYYY-MM-DD)",
+          },
         ]);
         return;
       }
@@ -285,6 +314,34 @@ const Dashboard = () => {
         },
       ]);
     }
+
+    if (awaitingCustomQuestion) {
+      try {
+        const res = await fetch("http://localhost:8081/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: input }),
+        });
+
+        const data = await res.json();
+
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: data.response },
+        ]);
+      } catch (error) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: `❌ Error getting response: ${error.message}`,
+          },
+        ]);
+      } finally {
+        setAwaitingCustomQuestion(false);
+      }
+      return;
+    }
   };
 
   const renderPage = () => {
@@ -296,13 +353,15 @@ const Dashboard = () => {
       case "Performance":
         return <PerformancePage />;
       case "AddDocument":
-        return <AddDocument />;  
+        return <AddDocument />;
       case "Add Employee":
         return <AddEmployee />;
       case "ManageEmployees":
-        return <ManageEmployees/>;
+        return <ManageEmployees />;
+      case "DashboardHR":
+        return <DashboardHR />;
       case "Help":
-        return <HelpPage />;  
+        return <HelpPage />;
       case "Dashboard":
       default:
         return <Content userId={userId} />;
@@ -336,7 +395,11 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <Siderbar selectedPage={selectedPage} onSelectPage={setSelectedPage} userRole={userData?.role} />
+      <Siderbar
+        selectedPage={selectedPage}
+        onSelectPage={setSelectedPage}
+        userRole={userData?.role}
+      />
       <div className="dashboard--content" style={{ display: "flex" }}>
         {selectedPage === "Dashboard" ? (
           <>
@@ -348,7 +411,12 @@ const Dashboard = () => {
             <div style={profileContainerStyle}>
               <Profile user={userData} />
             </div>
-            <div style={{ marginRight: isSmallScreen ? "0" : "350px", flexGrow: 1 }}>
+            <div
+              style={{
+                marginRight: isSmallScreen ? "0" : "350px",
+                flexGrow: 1,
+              }}
+            >
               {renderPage()}
             </div>
           </>
@@ -371,7 +439,10 @@ const Dashboard = () => {
 
           <div className="chatbot-messages">
             {messages.map((msg, index) => (
-              <div key={`${msg.role}-${index}`} className={`message ${msg.role}`}>
+              <div
+                key={`${msg.role}-${index}`}
+                className={`message ${msg.role}`}
+              >
                 <strong>{msg.role === "user" ? "You" : "Assistant"}:</strong>{" "}
                 {msg.content}
               </div>
@@ -379,7 +450,7 @@ const Dashboard = () => {
           </div>
 
           <div className="chatbot-options">
-            {!chatState &&
+            {!chatState && !awaitingCustomQuestion &&
               [
                 "🏖 Submit leave/vacation request",
                 "🔄 View request status",
@@ -395,7 +466,7 @@ const Dashboard = () => {
               ))}
           </div>
 
-          {chatState && (
+          {(chatState|| awaitingCustomQuestion) && (
             <div className="chatbot-input">
               <input
                 type="text"

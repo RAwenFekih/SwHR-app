@@ -9,6 +9,7 @@ import {
   BiUserPlus,
   BiFileBlank,
   BiGroup,
+  BiGrid,
 } from "react-icons/bi";
 import "./Siderbar.css";
 import logo1 from "../../assets/logo.png";
@@ -27,6 +28,11 @@ const Siderbar = ({ selectedPage, onSelectPage, userRole }) => {
       label: "Dashboard",
       icon: <BiHome className="icon" />,
       visible: true,
+    },
+    {
+      label: "DashboardHR",
+      icon: <BiGrid className="icon" />,
+      visible: userRole === "hr",
     },
     {
       label: "Requests",
@@ -89,6 +95,7 @@ const Siderbar = ({ selectedPage, onSelectPage, userRole }) => {
                item.label === "Requests" ? "Add Request" :
                item.label === "ManageEmployees" ? "Manage Employees" :
                item.label === "AddDocument" ? "Add Document" :
+               item.label === "DashboardHR" ? "Analysis" :
                item.label}
             </div>
           ))}
