@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const crypto = require('crypto');
 
 function generateUUID() {
     return crypto.randomUUID();
@@ -11,13 +12,14 @@ router.post('/', async (req, res) => {
 
     try {
         // Destructure and validate required fields
-        const { user_id, rating, comments = '' } = req.body;
+        const { user_id, doc_type, doc_name, file_path = '' } = req.body;
 
         // Validate required fields
         const missingFields = [];
         if (!user_id) missingFields.push('user_id');
-        if (!rating) missingFields.push('rating');
-        if (!comments) missingFields.push('comments');
+        if (!doc_type) missingFields.push('doc_type');
+        if (!doc_name) missingFields.push('doc_name');
+        if (!file_path) missingFields.push('file_path');
 
         if (missingFields.length > 0) {
             return res.status(400).json({
@@ -63,21 +65,23 @@ router.post('/', async (req, res) => {
         console.log(`Found user ${user.user_id}`);
 
         // Generate UUID for request_id
-        const performance_id = generateUUID();
-        const review_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const document_id = generateUUID();
+        const upload_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
         // Prepare and log insert query
         const insertQuery = `
       INSERT INTO documents 
-      (performance_id, user_id, rating, comments, review_date)
-      VALUES (?, ?, ?, ?, ?)
+      (document_id, user_id, doc_type, doc_name, file_path, 
+       upload_date)
+      VALUES (?, ?, ?, ?, ?, ?)
     `;
         const insertParams = [
-            performance_id,
+            document_id,
             user_id,
-            rating,
-            comments,
-            review_date,
+            doc_type,
+            doc_name,
+            file_path,
+            upload_date,
         ];
 
         console.log('Executing insert query:', { query: insertQuery, params: insertParams });
@@ -90,12 +94,13 @@ router.post('/', async (req, res) => {
         // Return success response
         const response = {
             success: true,
-            performance_id,
-            rating,
+            document_id,
+            doc_name,
             details: {
                 user_id,
-                comments,
-                review_date
+                doc_type,
+                file_path,
+                upload_date
             }
         };
 
@@ -126,7 +131,7 @@ router.get('/user/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
     const rows = await new Promise((resolve, reject) => {
-            db.query('SELECT * FROM performance WHERE user_id = ?', [userId], (err, result) => {
+            db.query('SELECT * FROM documents WHERE user_id = ?', [userId], (err, result) => {
                 if (err) {
                     return reject(err);
                 }

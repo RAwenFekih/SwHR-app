@@ -47,7 +47,6 @@ const Siderbar = ({ selectedPage, onSelectPage, userRole }) => {
     {
       label: "Performance",
       icon: <BiStats className="icon" />,
-      visible: true,
       visible: userRole === "hr",
     },
     {

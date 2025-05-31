@@ -160,4 +160,47 @@ router.get('/all/all', async (req, res) => {
   }
 });
 
+// Total Employees
+router.get('/api/total-employees', (req, res) => {
+  db.query('SELECT COUNT(*) AS total FROM users', (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.json(result[0]);
+  });
+});
+
+// Gender Distribution
+router.get('/api/gender-distribution', (req, res) => {
+  db.query(
+    `SELECT 
+      SUM(CASE WHEN sex = 'M' THEN 1 ELSE 0 END) AS male, 
+      SUM(CASE WHEN sex = 'F' THEN 1 ELSE 0 END) AS female 
+     FROM users`,
+    (err, result) => {
+      if (err) return res.status(500).send(err);
+      res.json(result[0]);
+    }
+  );
+});
+
+// Age Distribution
+router.get('/api/age-distribution', (req, res) => {
+  db.query(
+    `SELECT
+      CASE 
+        WHEN age BETWEEN 20 AND 30 THEN '20-30'
+        WHEN age BETWEEN 31 AND 40 THEN '31-40'
+        WHEN age BETWEEN 41 AND 50 THEN '41-50'
+        WHEN age BETWEEN 51 AND 60 THEN '51-60'
+        ELSE '61+'
+      END AS age_group,
+      COUNT(*) AS count
+     FROM users
+     GROUP BY age_group`,
+    (err, result) => {
+      if (err) return res.status(500).send(err);
+      res.json(result);
+    }
+  );
+});
+
 module.exports = router;
